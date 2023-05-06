@@ -213,3 +213,5 @@ sudo python3 darkmatter-theme.py --uninstall
 |**NixOS**|**GuixSD**|**DTOS**|
 |![Xubuntu](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-xubuntu.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-nobara.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-arcolinux.png)|
 |**Xubuntu**|**Nobara**|**ArcoLinux**|
+|![AthenaOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-athena.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/placeholder.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/placeholder.png)|
+|**AthenaOS**|**PLACEHOLDER**|**PLACEHOLDER**|
