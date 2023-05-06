@@ -119,6 +119,22 @@ sudo python3 darkmatter-theme.py --install
   }
   ```
 
+  If your NixOS configuration doesn't use Nix flakes yet, then import the module as shown below, but make sure to update the revision to the latest commit and also update the sha256:
+  
+  ```nix
+  { config, lib, pkgs, ... }:
+
+  {
+    imports =
+      [ (let rev = "main"; in import (builtins.fetchTarball {
+          url = "https://gitlab.com/VandalByte/darkmatter-grub-theme/-/archive/${rev}/darkmatter-grub-theme-${rev}.tar.gz";
+          sha256 = "0fckfx5sib3d4rjv6qzghlnkyrkcac9c9z1g84w9n6nkhy3h7s7b";
+          }))
+      ];
+
+  }
+  ```
+  
   #### 2️⃣ Enable and configure grub theme
 
   ```nix
