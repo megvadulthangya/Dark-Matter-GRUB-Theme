@@ -58,10 +58,10 @@ def change_grub_theme(grub_theme_path):
             elif line.startswith("GRUB_THEME"):
                 flag = True
                 data.pop(i)
-                data.insert(i, f'GRUB_THEME="{grub_theme_path}"\n')
+                data.insert(i, f'\nGRUB_THEME="{grub_theme_path}"\n')
 
         if not flag:
-            data.append(f'GRUB_THEME="{grub_theme_path}"\n')
+            data.append(f'\nGRUB_THEME="{grub_theme_path}"\n')
 
     with open("/etc/default/grub", "w") as grub_file:
         grub_file.writelines(data)
