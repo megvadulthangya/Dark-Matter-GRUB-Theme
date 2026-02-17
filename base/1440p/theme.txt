@@ -16,9 +16,9 @@ terminal-box: "menu_bkg_*.png"
     top = 30%
     height = 40%
     item_font = "Norwester Regular 28"
-    item_color = "#6b6b6b"
+    item_color = "#D8DEE9"
     selected_item_font = "Norwester Regular 30"
-    selected_item_color = "#ffffff"
+    selected_item_color = "#88C0D0"
     icon_width = 48
     icon_height = 48
     item_icon_space = 24
@@ -38,7 +38,7 @@ terminal-box: "menu_bkg_*.png"
     top = 75%
     height = 20
     text = ""
-    text_color = "#ffffff"
+    text_color = "#D8DEE9"
     font = "Norwester Regular 24"
     bar_style = "progress_bar_*.png"
     highlight_style = "progress_highlight_*.png"

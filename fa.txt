@@ -1,0 +1,493 @@
+[~/github/Dark-Matter-GRUB-Theme]
+   lt
+ .
+│
+├──  assets
+│   ├──  backgrounds
+│   │   ├──  arch-1080p.png
+│   │   ├──  arch-1440p.png
+│   │   ├──  archstrike-1080p.png
+│   │   ├──  archstrike-1440p.png
+│   │   ├──  arcolinux-1080p.png
+│   │   ├──  arcolinux-1440p.png
+│   │   ├──  artix-1080p.png
+│   │   ├──  artix-1440p.png
+│   │   ├──  athena-1080p.png
+│   │   ├──  athena-1440p.png
+│   │   ├──  blackarch-1080p.png
+│   │   ├──  blackarch-1440p.png
+│   │   ├──  centos-1080p.png
+│   │   ├──  centos-1440p.png
+│   │   ├──  chromeos-1080p.png
+│   │   ├──  chromeos-1440p.png
+│   │   ├──  debian-1080p.png
+│   │   ├──  debian-1440p.png
+│   │   ├──  deepin-1080p.png
+│   │   ├──  deepin-1440p.png
+│   │   ├──  devuan-1080p.png
+│   │   ├──  devuan-1440p.png
+│   │   ├──  dtos-1080p.png
+│   │   ├──  dtos-1440p.png
+│   │   ├──  elementary-1080p.png
+│   │   ├──  elementary-1440p.png
+│   │   ├──  endeavouros-1080p.png
+│   │   ├──  endeavouros-1440p.png
+│   │   ├──  fedora-1080p.png
+│   │   ├──  fedora-1440p.png
+│   │   ├──  freebsd-1080p.png
+│   │   ├──  freebsd-1440p.png
+│   │   ├──  garuda-1080p.png
+│   │   ├──  garuda-1440p.png
+│   │   ├──  gentoo-1080p.png
+│   │   ├──  gentoo-1440p.png
+│   │   ├──  guixsd-1080p.png
+│   │   ├──  guixsd-1440p.png
+│   │   ├──  kali-1080p.png
+│   │   ├──  kali-1440p.png
+│   │   ├──  kdeneon-1080p.png
+│   │   ├──  kdeneon-1440p.png
+│   │   ├──  kubuntu-1080p.png
+│   │   ├──  kubuntu-1440p.png
+│   │   ├──  linux-1080p.png
+│   │   ├──  linux-1440p.png
+│   │   ├──  linuxlite-1080p.png
+│   │   ├──  linuxlite-1440p.png
+│   │   ├──  linuxmint-1080p.png
+│   │   ├──  linuxmint-1440p.png
+│   │   ├──  lubuntu-1080p.png
+│   │   ├──  lubuntu-1440p.png
+│   │   ├──  manjaro-1080p.png
+│   │   ├──  manjaro-1440p.png
+│   │   ├──  mx-1080p.png
+│   │   ├──  mx-1440p.png
+│   │   ├──  nixos-1080p.png
+│   │   ├──  nixos-1440p.png
+│   │   ├──  nobara-1080p.png
+│   │   ├──  nobara-1440p.png
+│   │   ├──  opensuse-1080p.png
+│   │   ├──  opensuse-1440p.png
+│   │   ├──  parrot-1080p.png
+│   │   ├──  parrot-1440p.png
+│   │   ├──  pentoo-1080p.png
+│   │   ├──  pentoo-1440p.png
+│   │   ├──  popos-1080p.png
+│   │   ├──  popos-1440p.png
+│   │   ├──  redhat-1080p.png
+│   │   ├──  redhat-1440p.png
+│   │   ├──  slackware-1080p.png
+│   │   ├──  slackware-1440p.png
+│   │   ├──  solus-1080p.png
+│   │   ├──  solus-1440p.png
+│   │   ├──  sparky-1080p.png
+│   │   ├──  sparky-1440p.png
+│   │   ├──  steamos-1080p.png
+│   │   ├──  steamos-1440p.png
+│   │   ├──  ubuntu-1080p.png
+│   │   ├──  ubuntu-1440p.png
+│   │   ├──  ubuntumate-1080p.png
+│   │   ├──  ubuntumate-1440p.png
+│   │   ├──  void-1080p.png
+│   │   ├──  void-1440p.png
+│   │   ├──  windows10-1080p.png
+│   │   ├──  windows10-1440p.png
+│   │   ├──  windows11-1080p.png
+│   │   ├──  windows11-1440p.png
+│   │   ├──  xubuntu-1080p.png
+│   │   ├──  xubuntu-1440p.png
+│   │   ├──  zorin-1080p.png
+│   │   └──  zorin-1440p.png
+│   ├──  fonts
+│   │   ├──  1080p
+│   │   │   ├──  hackb_18.pf2
+│   │   │   ├──  norwester_16.pf2
+│   │   │   ├──  norwester_20.pf2
+│   │   │   └──  norwester_22.pf2
+│   │   ├──  1440p
+│   │   │   ├──  hackb_22.pf2
+│   │   │   ├──  norwester_24.pf2
+│   │   │   ├──  norwester_28.pf2
+│   │   │   └──  norwester_30.pf2
+│   │   └──  fonts.txt
+│   ├──  icons-1080p
+│   │   ├──  color
+│   │   │   ├──  4MLinux.png
+│   │   │   ├──  AlpineLinux.png
+│   │   │   ├──  android.png
+│   │   │   ├──  anonymous.png
+│   │   │   ├──  antergos.png
+│   │   │   ├──  arch.png
+│   │   │   ├──  archcraft.png
+│   │   │   ├──  archlinux.png
+│   │   │   ├──  arcolinux.png
+│   │   │   ├──  artix.png
+│   │   │   ├──  athena.png
+│   │   │   ├──  cancel.png
+│   │   │   ├──  centos.png
+│   │   │   ├──  chakra.png
+│   │   │   ├──  debian.png
+│   │   │   ├──  deepin.png
+│   │   │   ├──  devuan.png
+│   │   │   ├──  driver.png
+│   │   │   ├──  edit.png
+│   │   │   ├──  efi.png
+│   │   │   ├──  elementary.png
+│   │   │   ├──  endeavouros.png
+│   │   │   ├──  fedora.png
+│   │   │   ├──  find.efi.png
+│   │   │   ├──  find.none.png
+│   │   │   ├──  freebsd.png
+│   │   │   ├──  gameros.png
+│   │   │   ├──  garuda.png
+│   │   │   ├──  gentoo.png
+│   │   │   ├──  gnu-linux.png
+│   │   │   ├──  haiku.png
+│   │   │   ├──  help.png
+│   │   │   ├──  kali.png
+│   │   │   ├──  kaos.png
+│   │   │   ├──  kbd.png
+│   │   │   ├──  kernel.png
+│   │   │   ├──  korora.png
+│   │   │   ├──  kubuntu.png
+│   │   │   ├──  lang.png
+│   │   │   ├──  lfs.png
+│   │   │   ├──  linux.png
+│   │   │   ├──  linuxmint.png
+│   │   │   ├──  lubuntu.png
+│   │   │   ├──  macosx.png
+│   │   │   ├──  mageia.png
+│   │   │   ├──  Manjaro.i686.png
+│   │   │   ├──  manjaro.png
+│   │   │   ├──  Manjaro.x86_64.png
+│   │   │   ├──  manjarolinux.png
+│   │   │   ├──  memtest.png
+│   │   │   ├──  mx.png
+│   │   │   ├──  neon.png
+│   │   │   ├──  nixos.png
+│   │   │   ├──  opensuse.png
+│   │   │   ├──  parrot.png
+│   │   │   ├──  peppermint.png
+│   │   │   ├──  pop-os.png
+│   │   │   ├──  pop.png
+│   │   │   ├──  primeos.png
+│   │   │   ├──  puppy.png
+│   │   │   ├──  q4os.png
+│   │   │   ├──  recovery.png
+│   │   │   ├──  red.png
+│   │   │   ├──  redhat.png
+│   │   │   ├──  regolith.png
+│   │   │   ├──  restart.png
+│   │   │   ├──  rocky.png
+│   │   │   ├──  shutdown.png
+│   │   │   ├──  siduction.png
+│   │   │   ├──  slackware.png
+│   │   │   ├──  solus.png
+│   │   │   ├──  steamos.png
+│   │   │   ├──  submenu.png
+│   │   │   ├──  SystemRescueCD.png
+│   │   │   ├──  type.png
+│   │   │   ├──  tz.png
+│   │   │   ├──  ubuntu.png
+│   │   │   ├──  ubuntubudgie.png
+│   │   │   ├──  ubuntumate.png
+│   │   │   ├──  ubuntustudio.png
+│   │   │   ├──  unknown.png
+│   │   │   ├──  unset.png
+│   │   │   ├──  void.png
+│   │   │   ├──  windows.png
+│   │   │   ├──  windows10.png
+│   │   │   ├──  xubuntu.png
+│   │   │   └──  zorin.png
+│   │   └──  white
+│   │       ├──  4MLinux.png
+│   │       ├──  AlpineLinux.png
+│   │       ├──  android.png
+│   │       ├──  anonymous.png
+│   │       ├──  antergos.png
+│   │       ├──  arch.png
+│   │       ├──  archcraft.png
+│   │       ├──  archlinux.png
+│   │       ├──  arcolinux.png
+│   │       ├──  artix.png
+│   │       ├──  cancel.png
+│   │       ├──  chakra.png
+│   │       ├──  debian.png
+│   │       ├──  deepin.png
+│   │       ├──  devuan.png
+│   │       ├──  driver.png
+│   │       ├──  edit.png
+│   │       ├──  efi.png
+│   │       ├──  elementary.png
+│   │       ├──  endeavouros.png
+│   │       ├──  fedora.png
+│   │       ├──  find.efi.png
+│   │       ├──  find.none.png
+│   │       ├──  freebsd.png
+│   │       ├──  gentoo.png
+│   │       ├──  gnu-linux.png
+│   │       ├──  gpart.png
+│   │       ├──  haiku.png
+│   │       ├──  help.png
+│   │       ├──  kali.png
+│   │       ├──  kaos.png
+│   │       ├──  kbd.png
+│   │       ├──  kernel.png
+│   │       ├──  korora.png
+│   │       ├──  kubuntu.png
+│   │       ├──  lang.png
+│   │       ├──  lfs.png
+│   │       ├──  linux.png
+│   │       ├──  linuxmint.png
+│   │       ├──  lubuntu.png
+│   │       ├──  macosx.png
+│   │       ├──  mageia.png
+│   │       ├──  Manjaro.i686.png
+│   │       ├──  manjaro.png
+│   │       ├──  Manjaro.x86_64.png
+│   │       ├──  manjarolinux.png
+│   │       ├──  memtest.png
+│   │       ├──  mx.png
+│   │       ├──  neon.png
+│   │       ├──  nixos.png
+│   │       ├──  opensuse.png
+│   │       ├──  parrot.png
+│   │       ├──  pop-os.png
+│   │       ├──  pop.png
+│   │       ├──  primeos.png
+│   │       ├──  recovery.png
+│   │       ├──  regolith.png
+│   │       ├──  restart.png
+│   │       ├──  shutdown.png
+│   │       ├──  siduction.png
+│   │       ├──  solus.png
+│   │       ├──  steamos.png
+│   │       ├──  submenu.png
+│   │       ├──  SystemRescueCD.png
+│   │       ├──  type.png
+│   │       ├──  tz.png
+│   │       ├──  ubuntu.png
+│   │       ├──  unknown.png
+│   │       ├──  unset.png
+│   │       ├──  void.png
+│   │       ├──  windows.png
+│   │       ├──  windows10.png
+│   │       ├──  xubuntu.png
+│   │       └──  zorin.png
+│   └──  icons-1440p
+│       ├──  color
+│       │   ├──  4MLinux.png
+│       │   ├──  AlpineLinux.png
+│       │   ├──  android.png
+│       │   ├──  anonymous.png
+│       │   ├──  antergos.png
+│       │   ├──  arch.png
+│       │   ├──  archcraft.png
+│       │   ├──  archlinux.png
+│       │   ├──  arcolinux.png
+│       │   ├──  artix.png
+│       │   ├──  athena.png
+│       │   ├──  cancel.png
+│       │   ├──  chakra.png
+│       │   ├──  debian.png
+│       │   ├──  deepin.png
+│       │   ├──  devuan.png
+│       │   ├──  driver.png
+│       │   ├──  edit.png
+│       │   ├──  efi.png
+│       │   ├──  elementary.png
+│       │   ├──  endeavouros.png
+│       │   ├──  fedora.png
+│       │   ├──  find.efi.png
+│       │   ├──  find.none.png
+│       │   ├──  freebsd.png
+│       │   ├──  gentoo.png
+│       │   ├──  gnu-linux.png
+│       │   ├──  gpart.png
+│       │   ├──  haiku.png
+│       │   ├──  help.png
+│       │   ├──  kali.png
+│       │   ├──  kaos.png
+│       │   ├──  kbd.png
+│       │   ├──  kernel.png
+│       │   ├──  korora.png
+│       │   ├──  kubuntu.png
+│       │   ├──  lang.png
+│       │   ├──  lfs.png
+│       │   ├──  linux.png
+│       │   ├──  linuxmint.png
+│       │   ├──  lubuntu.png
+│       │   ├──  macosx.png
+│       │   ├──  mageia.png
+│       │   ├──  Manjaro.i686.png
+│       │   ├──  manjaro.png
+│       │   ├──  Manjaro.x86_64.png
+│       │   ├──  manjarolinux.png
+│       │   ├──  memtest.png
+│       │   ├──  mx.png
+│       │   ├──  neon.png
+│       │   ├──  nixos.png
+│       │   ├──  opensuse.png
+│       │   ├──  parrot.png
+│       │   ├──  pop-os.png
+│       │   ├──  pop.png
+│       │   ├──  primeos.png
+│       │   ├──  recovery.png
+│       │   ├──  regolith.png
+│       │   ├──  restart.png
+│       │   ├──  shutdown.png
+│       │   ├──  siduction.png
+│       │   ├──  solus.png
+│       │   ├──  steamos.png
+│       │   ├──  submenu.png
+│       │   ├──  SystemRescueCD.png
+│       │   ├──  type.png
+│       │   ├──  tz.png
+│       │   ├──  ubuntu.png
+│       │   ├──  unknown.png
+│       │   ├──  unset.png
+│       │   ├──  void.png
+│       │   ├──  windows.png
+│       │   ├──  windows10.png
+│       │   ├──  xubuntu.png
+│       │   └──  zorin.png
+│       └──  white
+│           ├──  4MLinux.png
+│           ├──  AlpineLinux.png
+│           ├──  android.png
+│           ├──  anonymous.png
+│           ├──  antergos.png
+│           ├──  arch.png
+│           ├──  archcraft.png
+│           ├──  archlinux.png
+│           ├──  arcolinux.png
+│           ├──  artix.png
+│           ├──  cancel.png
+│           ├──  chakra.png
+│           ├──  debian.png
+│           ├──  deepin.png
+│           ├──  devuan.png
+│           ├──  driver.png
+│           ├──  edit.png
+│           ├──  efi.png
+│           ├──  elementary.png
+│           ├──  endeavouros.png
+│           ├──  fedora.png
+│           ├──  find.efi.png
+│           ├──  find.none.png
+│           ├──  freebsd.png
+│           ├──  gentoo.png
+│           ├──  gnu-linux.png
+│           ├──  gpart.png
+│           ├──  haiku.png
+│           ├──  help.png
+│           ├──  kali.png
+│           ├──  kaos.png
+│           ├──  kbd.png
+│           ├──  kernel.png
+│           ├──  korora.png
+│           ├──  kubuntu.png
+│           ├──  lang.png
+│           ├──  lfs.png
+│           ├──  linux.png
+│           ├──  linuxmint.png
+│           ├──  lubuntu.png
+│           ├──  macosx.png
+│           ├──  mageia.png
+│           ├──  Manjaro.i686.png
+│           ├──  manjaro.png
+│           ├──  Manjaro.x86_64.png
+│           ├──  manjarolinux.png
+│           ├──  memtest.png
+│           ├──  mx-linux.png
+│           ├──  neon.png
+│           ├──  nixos.png
+│           ├──  opensuse.png
+│           ├──  parrot.png
+│           ├──  pop-os.png
+│           ├──  pop.png
+│           ├──  primeos.png
+│           ├──  recovery.png
+│           ├──  regolith.png
+│           ├──  restart.png
+│           ├──  shutdown.png
+│           ├──  siduction.png
+│           ├──  solus.png
+│           ├──  steamos.png
+│           ├──  submenu.png
+│           ├──  SystemRescueCD.png
+│           ├──  type.png
+│           ├──  tz.png
+│           ├──  ubuntu.png
+│           ├──  unknown.png
+│           ├──  unset.png
+│           ├──  void.png
+│           ├──  windows.png
+│           ├──  windows10.png
+│           ├──  xubuntu.png
+│           └──  zorin.png
+├──  base
+│   ├──  1080p
+│   │   ├──  boot_menu_c.png
+│   │   ├──  boot_menu_e.png
+│   │   ├──  boot_menu_n.png
+│   │   ├──  boot_menu_ne.png
+│   │   ├──  boot_menu_nw.png
+│   │   ├──  boot_menu_s.png
+│   │   ├──  boot_menu_se.png
+│   │   ├──  boot_menu_sw.png
+│   │   ├──  boot_menu_w.png
+│   │   ├──  menu_bkg_c.png
+│   │   ├──  menu_bkg_e.png
+│   │   ├──  menu_bkg_n.png
+│   │   ├──  menu_bkg_ne.png
+│   │   ├──  menu_bkg_nw.png
+│   │   ├──  menu_bkg_s.png
+│   │   ├──  menu_bkg_se.png
+│   │   ├──  menu_bkg_sw.png
+│   │   ├──  menu_bkg_w.png
+│   │   ├──  progress_bar_c.png
+│   │   ├──  progress_bar_e.png
+│   │   ├──  progress_bar_w.png
+│   │   ├──  progress_highlight_c.png
+│   │   ├──  select_c.png
+│   │   ├──  select_e.png
+│   │   ├──  select_w.png
+│   │   ├──  slider_c.png
+│   │   ├──  slider_n.png
+│   │   ├──  slider_s.png
+│   │   └──  theme.txt
+│   └──  1440p
+│       ├──  boot_menu_c.png
+│       ├──  boot_menu_e.png
+│       ├──  boot_menu_n.png
+│       ├──  boot_menu_ne.png
+│       ├──  boot_menu_nw.png
+│       ├──  boot_menu_s.png
+│       ├──  boot_menu_se.png
+│       ├──  boot_menu_sw.png
+│       ├──  boot_menu_w.png
+│       ├──  menu_bkg_c.png
+│       ├──  menu_bkg_e.png
+│       ├──  menu_bkg_n.png
+│       ├──  menu_bkg_ne.png
+│       ├──  menu_bkg_nw.png
+│       ├──  menu_bkg_s.png
+│       ├──  menu_bkg_se.png
+│       ├──  menu_bkg_sw.png
+│       ├──  menu_bkg_w.png
+│       ├──  progress_bar_c.png
+│       ├──  progress_bar_e.png
+│       ├──  progress_bar_w.png
+│       ├──  progress_highlight_c.png
+│       ├──  select_c.png
+│       ├──  select_e.png
+│       ├──  select_w.png
+│       ├──  slider_c.png
+│       ├──  slider_n.png
+│       ├──  slider_s.png
+│       └──  theme.txt
+├──  darkmatter-theme.py
+├──  default.nix
+├──  flake.lock
+├──  flake.nix
+├──  LICENSE
+└── 󰂺 README.md

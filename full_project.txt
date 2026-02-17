@@ -1,0 +1,1355 @@
+
+=========================================
+FILE: assets/fonts/fonts.txt
+=========================================
+
+The Fonts used, as well as their respective details, are listed below :
+
+--- HACK font ---------------------------------------------------------
+
+Author  : Chris Simpkins
+Source  : https://github.com/chrissimpkins/Hack
+License : MIT License & BITSTREAM VERA LICENSE
+          https://github.com/chrissimpkins/Hack/blob/master/LICENSE.md
+
+--- NORWESTER font ----------------------------------------------------
+
+Author  : Jamie Wilson
+Source  : https://www.fontsquirrel.com/fonts/norwester
+License : SIL Open Font License
+
+=========================================
+FILE: base/1080p/theme.txt
+=========================================
+
+# Dark Matter GRUB theme (1080p)
+
+desktop-image: "background.png"
+title-text: ""
+terminal-font: "Hack Bold 18"
+terminal-left: "20%"
+terminal-top: "35%"
+terminal-width: "60%"
+terminal-height: "40%"
+terminal-box: "menu_bkg_*.png"
+
++ boot_menu {
+    menu_pixmap_style = "boot_menu_*.png"
+    left = 10%
+    width = 45%
+    top = 30%
+    height = 40%
+    item_font = "Norwester Regular 20"
+    item_color = "#6b6b6b"
+    selected_item_font = "Norwester Regular 22"
+    selected_item_color = "#ffffff"
+    icon_width = 32
+    icon_height = 32
+    item_icon_space = 20
+    item_height = 36
+    item_padding = 5
+    item_spacing = 10
+    selected_item_pixmap_style = "select_*.png"
+    scrollbar = true
+    scrollbar_width = 10
+    scrollbar_thumb = "slider_*.png"
+}
+
++ progress_bar {
+    id = "__timeout__"
+    left = 10%
+    width = 45%
+    top = 75%
+    height = 20
+    text = ""
+    text_color = "#ffffff"
+    font = "Norwester Regular 16"
+    bar_style = "progress_bar_*.png"
+    highlight_style = "progress_highlight_*.png"
+}
+=========================================
+FILE: base/1440p/theme.txt
+=========================================
+
+# Dark Matter GRUB theme (1440p)
+
+desktop-image: "background.png"
+title-text: ""
+terminal-font: "Hack Bold 22"
+terminal-left: "20%"
+terminal-top: "35%"
+terminal-width: "60%"
+terminal-height: "40%"
+terminal-box: "menu_bkg_*.png"
+
++ boot_menu {
+    menu_pixmap_style = "boot_menu_*.png"
+    left = 10%
+    width = 45%
+    top = 30%
+    height = 40%
+    item_font = "Norwester Regular 28"
+    item_color = "#6b6b6b"
+    selected_item_font = "Norwester Regular 30"
+    selected_item_color = "#ffffff"
+    icon_width = 48
+    icon_height = 48
+    item_icon_space = 24
+    item_height = 56
+    item_padding = 8
+    item_spacing = 16
+    selected_item_pixmap_style = "select_*.png"
+    scrollbar = true
+    scrollbar_width = 10
+    scrollbar_thumb = "slider_*.png"
+}
+
++ progress_bar {
+    id = "__timeout__"
+    left = 10%
+    width = 45%
+    top = 75%
+    height = 20
+    text = ""
+    text_color = "#ffffff"
+    font = "Norwester Regular 24"
+    bar_style = "progress_bar_*.png"
+    highlight_style = "progress_highlight_*.png"
+}
+
+=========================================
+FILE: darkmatter-theme.py
+=========================================
+
+#!/usr/bin/env python3
+
+#  ___           _     __  __      _   _           
+# |   \ __ _ _ _| |__ |  \/  |__ _| |_| |_ ___ _ _ 
+# | |) / _` | '_| / / | |\/| / _` |  _|  _/ -_) '_|
+# |___/\__,_|_| |_\_\ |_|  |_\__,_|\__|\__\___|_|   GRUB THEME
+#
+# Version: 2.0                    Written by Vandal (VandalByte)
+#
+# GitLab (repo)   : https://gitlab.com/VandalByte/darkmatter-grub-theme 
+# Github (mirror) : https://github.com/VandalByte/darkmatter-grub2-theme 
+
+# imports
+import subprocess
+import os
+import shutil
+import sys
+
+
+# colors
+C = "\033[0m"     # clear (end)
+R = "\033[0;31m"  # red (error)
+G = "\033[0;32m"  # green (process)
+B = "\033[0;36m"  # blue (choice)
+Y = "\033[0;33m"  # yellow (info)
+
+# functions
+def check_root():
+    id = int(subprocess.check_output("id -u", shell=True).decode("utf-8"))
+    if id != 0:
+        print(f"\n{R}(!){C} Run the script with 'sudo' privileges or as root user !!\n")
+        exit()
+
+
+def check_distro():
+    try:
+        lsb_id = subprocess.check_output("lsb_release -i", shell=True).decode("utf-8")
+        id = lsb_id.split(":")[-1].lower().strip()
+    except Exception:
+        id = ""
+    return id
+
+
+def change_grub_theme(grub_theme_path):
+    with open("/etc/default/grub", "r") as grub_file:
+        data = grub_file.readlines()
+        flag = False
+        for i, line in enumerate(data):
+            if line.startswith("GRUB_TERMINAL_OUTPUT"):
+                data.pop(i)
+                data.insert(i, f"#{line}\n")
+            elif line.startswith("GRUB_TIMEOUT_STYLE"):
+                data.pop(i)
+                data.insert(i, f"#{line}\n")
+            elif line.startswith("GRUB_ENABLE_BLSCFG"):
+                data.pop(i)
+                data.insert(i, "GRUB_ENABLE_BLSCFG=false\n")
+            elif line.startswith("GRUB_THEME"):
+                flag = True
+                data.pop(i)
+                data.insert(i, f'GRUB_THEME="{grub_theme_path}"\n')
+
+        if not flag:
+            data.append(f'GRUB_THEME="{grub_theme_path}"\n')
+
+    with open("/etc/default/grub", "w") as grub_file:
+        grub_file.writelines(data)
+
+
+def reset_grub_theme():
+    with open("/etc/default/grub", "r") as grub_file:
+        data = grub_file.readlines()
+
+        for i, line in enumerate(data):
+            if line.startswith("GRUB_THEME"):
+                data.pop(i)  # removing existing line
+                # data.insert(i, f'#GRUB_THEME=""\n')  # adding new line
+
+    with open("/etc/default/grub", "w") as grub_file:
+        grub_file.writelines(data)
+
+
+def prompt(choices):
+    options = list(choices)
+    while True:
+        print(f"{B}(?){C} Choose an option [{options[0]}-{options[-1]}] : ", end="")
+        choice = input().upper()
+        if choice not in options:
+            print(f"\n{R}(!){C} Select one of the available options !!\n")
+            continue
+        return choice
+
+
+def banner():
+    print(B)
+    print(r"""    ___           _     __  __      _   _           
+   |   \ __ _ _ _| |__ |  \/  |__ _| |_| |_ ___ _ _ 
+   | |) / _` | '_| / / | |\/| / _` |  _|  _/ -_) '_|
+   |___/\__,_|_| |_\_\ |_|  |_\__,_|\__|\__\___|_|  """,end="")
+    print(f"{C} GRUB THEME\n")
+    print(f"   Written by {B}Vandal{C} (VandalByte)")
+
+
+def install():
+    # installer script
+    print("\n   INSTALLER ✔️")
+    THEME = "darkmatter"
+
+    # debian | arch
+    if os.path.exists("/boot/grub/"):
+        GRUB_THEMES_DIR = "/boot/grub/themes/"
+        GRUB_UPDATE_CMD = "grub-mkconfig -o /boot/grub/grub.cfg"
+
+        if not os.path.exists(GRUB_THEMES_DIR):
+            os.mkdir(GRUB_THEMES_DIR)
+
+    # fedora | redhat
+    elif os.path.exists("/boot/grub2/"):
+        GRUB_THEMES_DIR = "/boot/grub2/themes/"
+        GRUB_UPDATE_CMD = "grub2-mkconfig -o /boot/grub2/grub.cfg"
+
+        if not os.path.exists(GRUB_THEMES_DIR):
+            os.mkdir(GRUB_THEMES_DIR)
+
+    else:
+        print(f"\n{R}(!){C} Couldn't find the GRUB directory. Exiting the script ...")
+        exit()
+
+    styles = {
+        "1": "arch",
+        "2": "archstrike",
+        "3": "artix",     
+        "4": "avix",      
+        "5": "blackarch", 
+        "6": "centos",    
+        "7": "chromeos",  
+        "8": "debian",    
+        "9": "deepin",    
+        "10": "devuan",
+        "11": "elementary",
+        "12": "endeavouros",
+        "13": "fedora",
+        "14": "freebsd",
+        "15": "garuda",
+        "16": "gentoo",
+        "17": "kali",
+        "18": "kdeneon",
+        "19": "kubuntu",
+        "20": "linux",
+        "21": "linuxlite",
+        "22": "linuxmint",
+        "23": "lubuntu",
+        "24": "manjaro",
+        "25": "mx",
+        "26": "opensuse",
+        "27": "parrot",
+        "28": "pentoo",
+        "29": "popos",
+        "30": "redhat",
+        "31": "slackware",
+        "32": "solus",
+        "33": "sparky",
+        "34": "steamos",
+        "35": "ubuntu",
+        "36": "ubuntumate",
+        "37": "void",
+        "38": "windows10",
+        "39": "windows11",
+        "40": "zorin",
+        "41": "guixsd",
+        "42": "nixos",
+        "43": "xubuntu",
+        "44": "dtos",
+        "45": "nobara",
+        "46": "arcolinux",
+        "47": "athena",
+    }
+
+    print(f"\n{B}(?){C} \033[0;33mChoose the STYLE\033[0m :")
+
+    style_sheet_menu = f"""
+    (01)  Arch Linux   (02)  Arch Strike    (03)  Artix Linux
+    (04)  Avix Linux   (05)  BlackArch      (06)  CentOS
+    (07)  Chrome OS    (08)  Debian         (09)  Deepin
+    (10)  Devuan       (11)  ElementaryOS   (12)  EndeavourOS
+    (13)  Fedora       (14)  FreeBSD        (15)  Garuda Linux
+    (16)  Gentoo       (17)  Kali Linux     (18)  KDE neon
+    (19)  Kubuntu      (20)  Linux          (21)  Linux Lite
+    (22)  Linux Mint   (23)  Lubuntu        (24)  Manjaro
+    (25)  MX Linux     (26)  openSUSE       (27)  ParrotOS
+    (28)  Pentoo       (29)  PopOS          (30)  Red Hat
+    (31)  Slackware    (32)  Solus          (33)  Sparky Linux
+    (34)  SteamOS      (35)  Ubuntu         (36)  Ubuntu Mate
+    (37)  Void Linux   (38)  Windows 10     (39)  Windows 11
+    (40)  ZorinOS      (41)  GuixSD         (42)  NixOS
+    (43)  Xubuntu      (44)  DTOS           (45)  Nobara  
+    (46)  ArcoLinux    (47)  AthenaOS
+    """
+    print(style_sheet_menu)
+    choice = prompt(styles.keys())
+
+    THEME_DIR = f"{GRUB_THEMES_DIR}{THEME}/"
+
+    if os.path.exists(THEME_DIR):
+        print("\n")
+        print(f"{Y}(#){C} If you already have a version of this theme installed, uninstall it first.\n")
+        exit()
+    else:
+        os.mkdir(THEME_DIR)  # making the theme dir in '/boot/grub/themes'
+
+    # selecting resolution
+    print(f"\n{B}(?){C} Choose the RESOLUTION {Y}[default = 1]{C} :\n\n    (1) {G}1080p{C} {Y}[Full HD]{C}    (2) {G}1440p{C} {Y}[2K]{C}\n")
+    icon_theme_choice = input(f"{B}(?){C} choice : ")
+    if icon_theme_choice == "2":
+        RESOLUTION = "1440p"
+    else:
+        RESOLUTION = "1080p"
+
+    # selecting icon theme
+    print(f"\n{B}(?){C} Choose the ICON THEME {Y}[default = 1]{C} :\n\n    (1) {G}Color{C} Icons     (2) {G}White{C} Icons\n")
+    icon_theme_choice = input("choice : ")
+    if icon_theme_choice == "2":
+        ICON_THEME = "white"
+    else:
+        ICON_THEME = "color"
+
+    # defining asset paths
+    BACKGROUND_PATH = (f"assets/backgrounds/{styles.get(choice).lower()}-{RESOLUTION}.png")
+    ICONS_PATH = f"assets/icons-{RESOLUTION}/{ICON_THEME}/"
+    FONTS_PATH = f"assets/fonts/{RESOLUTION}/"
+    BASE_PATH = f"base/{RESOLUTION}/"
+
+    print(f"\n{G}($){C} Copying assets to {THEME_DIR}")
+    # copying & renaming background img
+    shutil.copy(BACKGROUND_PATH, f"{THEME_DIR}background.png")
+    # copying & renaming icon pack
+    shutil.copytree(ICONS_PATH, f"{THEME_DIR}icons/")  # 'icons' dir created inside main theme dir
+    # copying font files
+    shutil.copytree(FONTS_PATH, THEME_DIR, dirs_exist_ok=True)
+    # copying base files
+    shutil.copytree(BASE_PATH, THEME_DIR, dirs_exist_ok=True)
+    print("    done.\n")
+
+    print(f"{G}($){C} Editing the GRUB file ...")
+    THEME_PATH = f"{THEME_DIR}theme.txt"
+    change_grub_theme(THEME_PATH)
+    print("    done.\n")
+
+    print(f"{G}($){C} Updating GRUB ...\n")
+    subprocess.run(GRUB_UPDATE_CMD, shell=True)
+
+    print(f"\n{Y}(#){C} Dark Matter GRUB theme has been successfully installed !!\n")
+
+    distro = check_distro()
+    if distro == "kali":  # checking if it's Kali Linux
+        print(f"""{R}PS{C}: If you see this note, it means that the script identified your distro as Kali Linux.\n
+    To get the theme to work in Kali, you must remove/edit some default files, which you can do by
+    following the instructions at {B}https://github.com/VandalByte/grub-tweaks{C}""")
+    exit()
+
+
+def uninstall():
+    # uninstaller script
+    print("\n   UNINSTALLER ❌\n")
+    THEME = "darkmatter"  # theme name
+
+    # debian | arch
+    if os.path.exists("/boot/grub/"):
+        GRUB_THEME_DIR = f"/boot/grub/themes/{THEME}/"
+        GRUB_UPDATE_CMD = "grub-mkconfig -o /boot/grub/grub.cfg"
+
+    # fedora | redhat
+    elif os.path.exists("/boot/grub2/"):
+        GRUB_THEME_DIR = f"/boot/grub2/themes/{THEME}/"
+        GRUB_UPDATE_CMD = "grub2-mkconfig -o /boot/grub2/grub.cfg"
+
+    else:  # if theme not found
+        print(f"\n{R}(!){C} Couldn't find the GRUB directory. Exiting the script ...")
+        exit()
+
+    ask = input(f"{B}(?){C} Remove Dark Matter GRUB Theme (y/n)? {Y}[default = n]{C} : ")
+    if ask.lower() != "y":
+        print(f"\n{R}(!){C} No changes were made. Exiting the script ...\n")
+        exit()
+    else:
+        # removing theme folder
+        print(f"\n{G}($){C} Removed the theme directory ...\n")
+        shutil.rmtree(GRUB_THEME_DIR)
+        print("    done.\n")
+        
+
+    # resetting the grub file
+    print(f"{G}($){C} Resetting the GRUB file ...\n")
+    reset_grub_theme()
+    print("    done.\n")
+
+    # updating grub
+    print(f"{G}($){C} Updating GRUB ...\n")
+    subprocess.run(GRUB_UPDATE_CMD, shell=True)
+
+    print(f"\n{Y}(#){C} Dark Matter GRUB Theme has been successfully removed !!\n")
+    exit()
+
+
+if __name__ == "__main__":
+    check_root()  # checking root access
+    banner()  # shows banner
+    try:
+        if len(sys.argv) != 2:
+            raise Exception("Invalid number of arguments: Use either '-i' or '-u'")
+        if sys.argv[-1] in ["-i", "--install"]:
+            install()  # installer
+        elif sys.argv[-1] in ["-u", "--uninstall"]:
+            uninstall()  # uninstaller
+        else:
+            raise Exception("Invalid argument provided: Use either '-i' or '-u'")
+    except Exception as e:
+        print(f"\n{R}(!){C} An unexpected error occurred while running the script !!\n")
+        print(f"{R}(!){C} ERROR : {R}{e}{C}")
+        exit()
+
+=========================================
+FILE: default.nix
+=========================================
+
+(import
+  (
+    let lock = builtins.fromJSON (builtins.readFile ./flake.lock); in
+    fetchTarball {
+      url = "https://github.com/edolstra/flake-compat/archive/${lock.nodes.flake-compat.locked.rev}.tar.gz";
+      sha256 = lock.nodes.flake-compat.locked.narHash;
+    }
+  )
+  { src = ./.; }
+).defaultNix.nixosModule
+
+=========================================
+FILE: fa.txt
+=========================================
+
+[~/github/Dark-Matter-GRUB-Theme]
+   lt
+ .
+│
+├──  assets
+│   ├──  backgrounds
+│   │   ├──  arch-1080p.png
+│   │   ├──  arch-1440p.png
+│   │   ├──  archstrike-1080p.png
+│   │   ├──  archstrike-1440p.png
+│   │   ├──  arcolinux-1080p.png
+│   │   ├──  arcolinux-1440p.png
+│   │   ├──  artix-1080p.png
+│   │   ├──  artix-1440p.png
+│   │   ├──  athena-1080p.png
+│   │   ├──  athena-1440p.png
+│   │   ├──  blackarch-1080p.png
+│   │   ├──  blackarch-1440p.png
+│   │   ├──  centos-1080p.png
+│   │   ├──  centos-1440p.png
+│   │   ├──  chromeos-1080p.png
+│   │   ├──  chromeos-1440p.png
+│   │   ├──  debian-1080p.png
+│   │   ├──  debian-1440p.png
+│   │   ├──  deepin-1080p.png
+│   │   ├──  deepin-1440p.png
+│   │   ├──  devuan-1080p.png
+│   │   ├──  devuan-1440p.png
+│   │   ├──  dtos-1080p.png
+│   │   ├──  dtos-1440p.png
+│   │   ├──  elementary-1080p.png
+│   │   ├──  elementary-1440p.png
+│   │   ├──  endeavouros-1080p.png
+│   │   ├──  endeavouros-1440p.png
+│   │   ├──  fedora-1080p.png
+│   │   ├──  fedora-1440p.png
+│   │   ├──  freebsd-1080p.png
+│   │   ├──  freebsd-1440p.png
+│   │   ├──  garuda-1080p.png
+│   │   ├──  garuda-1440p.png
+│   │   ├──  gentoo-1080p.png
+│   │   ├──  gentoo-1440p.png
+│   │   ├──  guixsd-1080p.png
+│   │   ├──  guixsd-1440p.png
+│   │   ├──  kali-1080p.png
+│   │   ├──  kali-1440p.png
+│   │   ├──  kdeneon-1080p.png
+│   │   ├──  kdeneon-1440p.png
+│   │   ├──  kubuntu-1080p.png
+│   │   ├──  kubuntu-1440p.png
+│   │   ├──  linux-1080p.png
+│   │   ├──  linux-1440p.png
+│   │   ├──  linuxlite-1080p.png
+│   │   ├──  linuxlite-1440p.png
+│   │   ├──  linuxmint-1080p.png
+│   │   ├──  linuxmint-1440p.png
+│   │   ├──  lubuntu-1080p.png
+│   │   ├──  lubuntu-1440p.png
+│   │   ├──  manjaro-1080p.png
+│   │   ├──  manjaro-1440p.png
+│   │   ├──  mx-1080p.png
+│   │   ├──  mx-1440p.png
+│   │   ├──  nixos-1080p.png
+│   │   ├──  nixos-1440p.png
+│   │   ├──  nobara-1080p.png
+│   │   ├──  nobara-1440p.png
+│   │   ├──  opensuse-1080p.png
+│   │   ├──  opensuse-1440p.png
+│   │   ├──  parrot-1080p.png
+│   │   ├──  parrot-1440p.png
+│   │   ├──  pentoo-1080p.png
+│   │   ├──  pentoo-1440p.png
+│   │   ├──  popos-1080p.png
+│   │   ├──  popos-1440p.png
+│   │   ├──  redhat-1080p.png
+│   │   ├──  redhat-1440p.png
+│   │   ├──  slackware-1080p.png
+│   │   ├──  slackware-1440p.png
+│   │   ├──  solus-1080p.png
+│   │   ├──  solus-1440p.png
+│   │   ├──  sparky-1080p.png
+│   │   ├──  sparky-1440p.png
+│   │   ├──  steamos-1080p.png
+│   │   ├──  steamos-1440p.png
+│   │   ├──  ubuntu-1080p.png
+│   │   ├──  ubuntu-1440p.png
+│   │   ├──  ubuntumate-1080p.png
+│   │   ├──  ubuntumate-1440p.png
+│   │   ├──  void-1080p.png
+│   │   ├──  void-1440p.png
+│   │   ├──  windows10-1080p.png
+│   │   ├──  windows10-1440p.png
+│   │   ├──  windows11-1080p.png
+│   │   ├──  windows11-1440p.png
+│   │   ├──  xubuntu-1080p.png
+│   │   ├──  xubuntu-1440p.png
+│   │   ├──  zorin-1080p.png
+│   │   └──  zorin-1440p.png
+│   ├──  fonts
+│   │   ├──  1080p
+│   │   │   ├──  hackb_18.pf2
+│   │   │   ├──  norwester_16.pf2
+│   │   │   ├──  norwester_20.pf2
+│   │   │   └──  norwester_22.pf2
+│   │   ├──  1440p
+│   │   │   ├──  hackb_22.pf2
+│   │   │   ├──  norwester_24.pf2
+│   │   │   ├──  norwester_28.pf2
+│   │   │   └──  norwester_30.pf2
+│   │   └──  fonts.txt
+│   ├──  icons-1080p
+│   │   ├──  color
+│   │   │   ├──  4MLinux.png
+│   │   │   ├──  AlpineLinux.png
+│   │   │   ├──  android.png
+│   │   │   ├──  anonymous.png
+│   │   │   ├──  antergos.png
+│   │   │   ├──  arch.png
+│   │   │   ├──  archcraft.png
+│   │   │   ├──  archlinux.png
+│   │   │   ├──  arcolinux.png
+│   │   │   ├──  artix.png
+│   │   │   ├──  athena.png
+│   │   │   ├──  cancel.png
+│   │   │   ├──  centos.png
+│   │   │   ├──  chakra.png
+│   │   │   ├──  debian.png
+│   │   │   ├──  deepin.png
+│   │   │   ├──  devuan.png
+│   │   │   ├──  driver.png
+│   │   │   ├──  edit.png
+│   │   │   ├──  efi.png
+│   │   │   ├──  elementary.png
+│   │   │   ├──  endeavouros.png
+│   │   │   ├──  fedora.png
+│   │   │   ├──  find.efi.png
+│   │   │   ├──  find.none.png
+│   │   │   ├──  freebsd.png
+│   │   │   ├──  gameros.png
+│   │   │   ├──  garuda.png
+│   │   │   ├──  gentoo.png
+│   │   │   ├──  gnu-linux.png
+│   │   │   ├──  haiku.png
+│   │   │   ├──  help.png
+│   │   │   ├──  kali.png
+│   │   │   ├──  kaos.png
+│   │   │   ├──  kbd.png
+│   │   │   ├──  kernel.png
+│   │   │   ├──  korora.png
+│   │   │   ├──  kubuntu.png
+│   │   │   ├──  lang.png
+│   │   │   ├──  lfs.png
+│   │   │   ├──  linux.png
+│   │   │   ├──  linuxmint.png
+│   │   │   ├──  lubuntu.png
+│   │   │   ├──  macosx.png
+│   │   │   ├──  mageia.png
+│   │   │   ├──  Manjaro.i686.png
+│   │   │   ├──  manjaro.png
+│   │   │   ├──  Manjaro.x86_64.png
+│   │   │   ├──  manjarolinux.png
+│   │   │   ├──  memtest.png
+│   │   │   ├──  mx.png
+│   │   │   ├──  neon.png
+│   │   │   ├──  nixos.png
+│   │   │   ├──  opensuse.png
+│   │   │   ├──  parrot.png
+│   │   │   ├──  peppermint.png
+│   │   │   ├──  pop-os.png
+│   │   │   ├──  pop.png
+│   │   │   ├──  primeos.png
+│   │   │   ├──  puppy.png
+│   │   │   ├──  q4os.png
+│   │   │   ├──  recovery.png
+│   │   │   ├──  red.png
+│   │   │   ├──  redhat.png
+│   │   │   ├──  regolith.png
+│   │   │   ├──  restart.png
+│   │   │   ├──  rocky.png
+│   │   │   ├──  shutdown.png
+│   │   │   ├──  siduction.png
+│   │   │   ├──  slackware.png
+│   │   │   ├──  solus.png
+│   │   │   ├──  steamos.png
+│   │   │   ├──  submenu.png
+│   │   │   ├──  SystemRescueCD.png
+│   │   │   ├──  type.png
+│   │   │   ├──  tz.png
+│   │   │   ├──  ubuntu.png
+│   │   │   ├──  ubuntubudgie.png
+│   │   │   ├──  ubuntumate.png
+│   │   │   ├──  ubuntustudio.png
+│   │   │   ├──  unknown.png
+│   │   │   ├──  unset.png
+│   │   │   ├──  void.png
+│   │   │   ├──  windows.png
+│   │   │   ├──  windows10.png
+│   │   │   ├──  xubuntu.png
+│   │   │   └──  zorin.png
+│   │   └──  white
+│   │       ├──  4MLinux.png
+│   │       ├──  AlpineLinux.png
+│   │       ├──  android.png
+│   │       ├──  anonymous.png
+│   │       ├──  antergos.png
+│   │       ├──  arch.png
+│   │       ├──  archcraft.png
+│   │       ├──  archlinux.png
+│   │       ├──  arcolinux.png
+│   │       ├──  artix.png
+│   │       ├──  cancel.png
+│   │       ├──  chakra.png
+│   │       ├──  debian.png
+│   │       ├──  deepin.png
+│   │       ├──  devuan.png
+│   │       ├──  driver.png
+│   │       ├──  edit.png
+│   │       ├──  efi.png
+│   │       ├──  elementary.png
+│   │       ├──  endeavouros.png
+│   │       ├──  fedora.png
+│   │       ├──  find.efi.png
+│   │       ├──  find.none.png
+│   │       ├──  freebsd.png
+│   │       ├──  gentoo.png
+│   │       ├──  gnu-linux.png
+│   │       ├──  gpart.png
+│   │       ├──  haiku.png
+│   │       ├──  help.png
+│   │       ├──  kali.png
+│   │       ├──  kaos.png
+│   │       ├──  kbd.png
+│   │       ├──  kernel.png
+│   │       ├──  korora.png
+│   │       ├──  kubuntu.png
+│   │       ├──  lang.png
+│   │       ├──  lfs.png
+│   │       ├──  linux.png
+│   │       ├──  linuxmint.png
+│   │       ├──  lubuntu.png
+│   │       ├──  macosx.png
+│   │       ├──  mageia.png
+│   │       ├──  Manjaro.i686.png
+│   │       ├──  manjaro.png
+│   │       ├──  Manjaro.x86_64.png
+│   │       ├──  manjarolinux.png
+│   │       ├──  memtest.png
+│   │       ├──  mx.png
+│   │       ├──  neon.png
+│   │       ├──  nixos.png
+│   │       ├──  opensuse.png
+│   │       ├──  parrot.png
+│   │       ├──  pop-os.png
+│   │       ├──  pop.png
+│   │       ├──  primeos.png
+│   │       ├──  recovery.png
+│   │       ├──  regolith.png
+│   │       ├──  restart.png
+│   │       ├──  shutdown.png
+│   │       ├──  siduction.png
+│   │       ├──  solus.png
+│   │       ├──  steamos.png
+│   │       ├──  submenu.png
+│   │       ├──  SystemRescueCD.png
+│   │       ├──  type.png
+│   │       ├──  tz.png
+│   │       ├──  ubuntu.png
+│   │       ├──  unknown.png
+│   │       ├──  unset.png
+│   │       ├──  void.png
+│   │       ├──  windows.png
+│   │       ├──  windows10.png
+│   │       ├──  xubuntu.png
+│   │       └──  zorin.png
+│   └──  icons-1440p
+│       ├──  color
+│       │   ├──  4MLinux.png
+│       │   ├──  AlpineLinux.png
+│       │   ├──  android.png
+│       │   ├──  anonymous.png
+│       │   ├──  antergos.png
+│       │   ├──  arch.png
+│       │   ├──  archcraft.png
+│       │   ├──  archlinux.png
+│       │   ├──  arcolinux.png
+│       │   ├──  artix.png
+│       │   ├──  athena.png
+│       │   ├──  cancel.png
+│       │   ├──  chakra.png
+│       │   ├──  debian.png
+│       │   ├──  deepin.png
+│       │   ├──  devuan.png
+│       │   ├──  driver.png
+│       │   ├──  edit.png
+│       │   ├──  efi.png
+│       │   ├──  elementary.png
+│       │   ├──  endeavouros.png
+│       │   ├──  fedora.png
+│       │   ├──  find.efi.png
+│       │   ├──  find.none.png
+│       │   ├──  freebsd.png
+│       │   ├──  gentoo.png
+│       │   ├──  gnu-linux.png
+│       │   ├──  gpart.png
+│       │   ├──  haiku.png
+│       │   ├──  help.png
+│       │   ├──  kali.png
+│       │   ├──  kaos.png
+│       │   ├──  kbd.png
+│       │   ├──  kernel.png
+│       │   ├──  korora.png
+│       │   ├──  kubuntu.png
+│       │   ├──  lang.png
+│       │   ├──  lfs.png
+│       │   ├──  linux.png
+│       │   ├──  linuxmint.png
+│       │   ├──  lubuntu.png
+│       │   ├──  macosx.png
+│       │   ├──  mageia.png
+│       │   ├──  Manjaro.i686.png
+│       │   ├──  manjaro.png
+│       │   ├──  Manjaro.x86_64.png
+│       │   ├──  manjarolinux.png
+│       │   ├──  memtest.png
+│       │   ├──  mx.png
+│       │   ├──  neon.png
+│       │   ├──  nixos.png
+│       │   ├──  opensuse.png
+│       │   ├──  parrot.png
+│       │   ├──  pop-os.png
+│       │   ├──  pop.png
+│       │   ├──  primeos.png
+│       │   ├──  recovery.png
+│       │   ├──  regolith.png
+│       │   ├──  restart.png
+│       │   ├──  shutdown.png
+│       │   ├──  siduction.png
+│       │   ├──  solus.png
+│       │   ├──  steamos.png
+│       │   ├──  submenu.png
+│       │   ├──  SystemRescueCD.png
+│       │   ├──  type.png
+│       │   ├──  tz.png
+│       │   ├──  ubuntu.png
+│       │   ├──  unknown.png
+│       │   ├──  unset.png
+│       │   ├──  void.png
+│       │   ├──  windows.png
+│       │   ├──  windows10.png
+│       │   ├──  xubuntu.png
+│       │   └──  zorin.png
+│       └──  white
+│           ├──  4MLinux.png
+│           ├──  AlpineLinux.png
+│           ├──  android.png
+│           ├──  anonymous.png
+│           ├──  antergos.png
+│           ├──  arch.png
+│           ├──  archcraft.png
+│           ├──  archlinux.png
+│           ├──  arcolinux.png
+│           ├──  artix.png
+│           ├──  cancel.png
+│           ├──  chakra.png
+│           ├──  debian.png
+│           ├──  deepin.png
+│           ├──  devuan.png
+│           ├──  driver.png
+│           ├──  edit.png
+│           ├──  efi.png
+│           ├──  elementary.png
+│           ├──  endeavouros.png
+│           ├──  fedora.png
+│           ├──  find.efi.png
+│           ├──  find.none.png
+│           ├──  freebsd.png
+│           ├──  gentoo.png
+│           ├──  gnu-linux.png
+│           ├──  gpart.png
+│           ├──  haiku.png
+│           ├──  help.png
+│           ├──  kali.png
+│           ├──  kaos.png
+│           ├──  kbd.png
+│           ├──  kernel.png
+│           ├──  korora.png
+│           ├──  kubuntu.png
+│           ├──  lang.png
+│           ├──  lfs.png
+│           ├──  linux.png
+│           ├──  linuxmint.png
+│           ├──  lubuntu.png
+│           ├──  macosx.png
+│           ├──  mageia.png
+│           ├──  Manjaro.i686.png
+│           ├──  manjaro.png
+│           ├──  Manjaro.x86_64.png
+│           ├──  manjarolinux.png
+│           ├──  memtest.png
+│           ├──  mx-linux.png
+│           ├──  neon.png
+│           ├──  nixos.png
+│           ├──  opensuse.png
+│           ├──  parrot.png
+│           ├──  pop-os.png
+│           ├──  pop.png
+│           ├──  primeos.png
+│           ├──  recovery.png
+│           ├──  regolith.png
+│           ├──  restart.png
+│           ├──  shutdown.png
+│           ├──  siduction.png
+│           ├──  solus.png
+│           ├──  steamos.png
+│           ├──  submenu.png
+│           ├──  SystemRescueCD.png
+│           ├──  type.png
+│           ├──  tz.png
+│           ├──  ubuntu.png
+│           ├──  unknown.png
+│           ├──  unset.png
+│           ├──  void.png
+│           ├──  windows.png
+│           ├──  windows10.png
+│           ├──  xubuntu.png
+│           └──  zorin.png
+├──  base
+│   ├──  1080p
+│   │   ├──  boot_menu_c.png
+│   │   ├──  boot_menu_e.png
+│   │   ├──  boot_menu_n.png
+│   │   ├──  boot_menu_ne.png
+│   │   ├──  boot_menu_nw.png
+│   │   ├──  boot_menu_s.png
+│   │   ├──  boot_menu_se.png
+│   │   ├──  boot_menu_sw.png
+│   │   ├──  boot_menu_w.png
+│   │   ├──  menu_bkg_c.png
+│   │   ├──  menu_bkg_e.png
+│   │   ├──  menu_bkg_n.png
+│   │   ├──  menu_bkg_ne.png
+│   │   ├──  menu_bkg_nw.png
+│   │   ├──  menu_bkg_s.png
+│   │   ├──  menu_bkg_se.png
+│   │   ├──  menu_bkg_sw.png
+│   │   ├──  menu_bkg_w.png
+│   │   ├──  progress_bar_c.png
+│   │   ├──  progress_bar_e.png
+│   │   ├──  progress_bar_w.png
+│   │   ├──  progress_highlight_c.png
+│   │   ├──  select_c.png
+│   │   ├──  select_e.png
+│   │   ├──  select_w.png
+│   │   ├──  slider_c.png
+│   │   ├──  slider_n.png
+│   │   ├──  slider_s.png
+│   │   └──  theme.txt
+│   └──  1440p
+│       ├──  boot_menu_c.png
+│       ├──  boot_menu_e.png
+│       ├──  boot_menu_n.png
+│       ├──  boot_menu_ne.png
+│       ├──  boot_menu_nw.png
+│       ├──  boot_menu_s.png
+│       ├──  boot_menu_se.png
+│       ├──  boot_menu_sw.png
+│       ├──  boot_menu_w.png
+│       ├──  menu_bkg_c.png
+│       ├──  menu_bkg_e.png
+│       ├──  menu_bkg_n.png
+│       ├──  menu_bkg_ne.png
+│       ├──  menu_bkg_nw.png
+│       ├──  menu_bkg_s.png
+│       ├──  menu_bkg_se.png
+│       ├──  menu_bkg_sw.png
+│       ├──  menu_bkg_w.png
+│       ├──  progress_bar_c.png
+│       ├──  progress_bar_e.png
+│       ├──  progress_bar_w.png
+│       ├──  progress_highlight_c.png
+│       ├──  select_c.png
+│       ├──  select_e.png
+│       ├──  select_w.png
+│       ├──  slider_c.png
+│       ├──  slider_n.png
+│       ├──  slider_s.png
+│       └──  theme.txt
+├──  darkmatter-theme.py
+├──  default.nix
+├──  flake.lock
+├──  flake.nix
+├──  LICENSE
+└── 󰂺 README.md
+
+=========================================
+FILE: flake.lock
+=========================================
+
+{
+  "nodes": {
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673956053,
+        "narHash": "sha256-4gtG9iQuiKITOjNQQeQIpoIB6b16fm+504Ch3sNKLd8=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "35bb57c0c8d8b62bbfd284272c928ceb64ddbde9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1661353537,
+        "narHash": "sha256-1E2IGPajOsrkR49mM5h55OtYnU0dGyre6gl60NXKITE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0e304ff0d9db453a4b230e9386418fd974d5804a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
+
+=========================================
+FILE: flake.nix
+=========================================
+
+{
+  description = "Flake to manage Dark Matter grub themes from Vandal";
+
+  inputs = {
+    nixpkgs.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
+  };
+
+  outputs = { self, nixpkgs, flake-compat }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+    in
+    with nixpkgs.lib;
+    {
+      nixosModule = { config, ... }:
+        let
+          cfg = config.boot.loader.grub.darkmatter-theme;
+
+          darkmatter-grub-theme = pkgs.stdenv.mkDerivation {
+            name = "darkmatter-grub-theme";
+            src = ./.;
+            installPhase = ''
+              mkdir -p $out/grub/theme/
+              
+              cp assets/backgrounds/${cfg.style}-${cfg.resolution}.png $out/grub/theme/background.png
+              cp -r assets/icons-${cfg.resolution}/${cfg.icon}/ $out/grub/theme/icons/
+              cp -r assets/fonts/${cfg.resolution}/* $out/grub/theme/
+              cp -r base/${cfg.resolution}/* $out/grub/theme
+            '';
+          };
+        in
+        {
+          options = {
+            boot.loader.grub.darkmatter-theme = {
+              enable = mkOption {
+                type = types.bool;
+                default = false;
+                example = true;
+                description = ''
+                  Enable Dark Matter grub theme from Vandal
+                '';
+              };
+              style = mkOption {
+                type = types.enum [
+                  "arch"
+                  "archstrike"
+                  "artix"
+                  "avix"
+                  "blackarch"
+                  "centos"
+                  "chromeos"
+                  "debian"
+                  "deepin"
+                  "devuan"
+                  "elementary"
+                  "endeavouros"
+                  "fedora"
+                  "freebsd"
+                  "garuda"
+                  "gentoo"
+                  "kali"
+                  "kdeneon"
+                  "kubuntu"
+                  "linux"
+                  "linuxlite"
+                  "linuxmint"
+                  "lubuntu"
+                  "manjaro"
+                  "mx"
+                  "opensuse"
+                  "parrot"
+                  "pentoo"
+                  "popos"
+                  "redhat"
+                  "slackware"
+                  "solus"
+                  "sparky"
+                  "steamos"
+                  "ubuntu"
+                  "ubuntumate"
+                  "void"
+                  "windows10"
+                  "windows11"
+                  "zorin"
+                  "guixsd"
+                  "nixos"
+                  "xubuntu"
+                  "dtos"
+                  "nobara"
+                ];
+                example = "nixos";
+                description = ''
+                  The theme to use for grub
+                '';
+              };
+              icon = mkOption {
+                type = types.enum [ "color" "white" ];
+                default = "color";
+                example = "color";
+              };
+              resolution = mkOption {
+                type = types.enum [ "1080p" "1440p" ];
+                default = "1080p";
+                example = "1080p";
+              };
+
+            };
+          };
+
+          config = mkIf cfg.enable (mkMerge [{
+            environment.systemPackages = [ darkmatter-grub-theme ];
+            boot.loader.grub = {
+              theme = "${darkmatter-grub-theme}/grub/theme";
+            };
+          }]);
+        };
+    };
+}
+
+=========================================
+FILE: README.md
+=========================================
+
+<div align="center">
+  <img width=90% src="https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/banner.png" alt="banner" />
+</div>
+
+<div align="center">
+  <a href="https://gitlab.com/VandalByte/darkmatter-grub-theme/-/raw/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-008a8a?style=for-the-badge" alt="license" />
+  </a>
+  <a href="https://www.pling.com/p/1603282">
+    <img src="https://img.shields.io/badge/Download-green?style=for-the-badge" alt="license" />
+  </a>
+  <a href="https://github.com/VandalByte/darkmatter-grub2-theme">
+    <img src="https://img.shields.io/badge/github%20(mirror)-303030?style=for-the-badge" alt="license" />
+  </a>
+</div>
+
+### ✔️ Installation
+
+```shell
+git clone --depth 1 https://gitlab.com/VandalByte/darkmatter-grub-theme.git && cd darkmatter-grub-theme
+sudo python3 darkmatter-theme.py --install
+```
+
+### ✔️ Manual Installation
+
+<details>
+ <summary><b>Debian ✨ Ubuntu ✨ Arch</b></summary>
+ 
+  #### 1️⃣ Download your favourite version of the theme from [**Pling**](https://www.pling.com/p/1603282/)
+
+  Now extract your downloaded .zip file.
+
+  Either manually extract it or use the command below. ( *Here I'm using debian version of my theme as an example* )
+  ```shell
+  unzip dark-matter-debian.zip
+  ```
+  *The rest of the commands are the same for all theme styles.*
+
+  #### 2️⃣ Copy the theme directory.
+  ```shell
+  sudo cp -r dark-matter /boot/grub/themes/
+  ```
+  #### 3️⃣ Make changes to the GRUB config file.
+
+  ```shell
+  sudo nano /etc/default/grub
+  ```
+  Find the line `GRUB_THEME=` then change it to `GRUB_THEME="/boot/grub/themes/dark-matter/theme.txt"`
+
+  Then save the file.
+
+  #### 4️⃣ Finally, update the grub.
+  ```shell
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  ```
+  Now the theme should be installed successfully, enjoy !!
+</details>
+
+<details>
+ <summary><b>Fedora ✨ Redhat</b></summary>
+ 
+  #### 1️⃣ Download your favourite version of the theme from [**Pling**](https://www.pling.com/p/1603282/)
+
+  Now extract your downloaded .zip file.
+
+  Either manually extract it or use the command below. ( *Here I'm using debian version of my theme as an example* )
+  ```shell
+  unzip dark-matter-debian.zip
+  ```
+  *The rest of the commands are the same for all theme styles.*
+
+  #### 2️⃣ Copy the theme directory.
+  ```shell
+  sudo cp -r dark-matter /boot/grub2/themes/
+  ```
+  #### 3️⃣ Make changes to the GRUB config file.
+
+  ```shell
+  sudo nano /etc/default/grub
+  ```
+  Find the line `GRUB_THEME=` then change it to `GRUB_THEME="/boot/grub2/themes/dark-matter/theme.txt"`
+ 
+  Change the line `GRUB_TERMINAL_OUTPUT=console` to this *(comment it out)* `#GRUB_TERMINAL_OUTPUT=console`
+
+  Then save the file.
+
+  #### 4️⃣ Finally, update the grub.
+  ```shell
+  sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+  ```
+  Now restart your computer the grub theme should be installed successfully, enjoy !!
+</details>
+
+<details>
+ <summary><b>NixOS</b></summary>
+ 
+  #### 1️⃣ Add darkmatter-grub-theme to your flake as nixos module
+
+  ```nix
+  {
+    inputs = {
+      nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
+
+      darkmatter-grub-theme = {
+        url = gitlab:VandalByte/darkmatter-grub-theme;
+        inputs.nixpkgs.follows = "nixpkgs";
+      };
+    };
+
+    outputs = inputs @ { self, nixpkgs, darkmatter-grub-theme }: {
+      nixosConfigurations.mysystem = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          darkmatter-grub-theme.nixosModule
+          ./path/to/your/configuration.nix
+        ];
+      };
+    };
+  }
+  ```
+
+  If your NixOS configuration doesn't use Nix flakes yet, then import the module as shown below, but make sure to update the revision to the latest commit and also update the sha256:
+  
+  ```nix
+  { config, lib, pkgs, ... }:
+
+  {
+    imports =
+      [ (let rev = "main"; in import (builtins.fetchTarball {
+          url = "https://gitlab.com/VandalByte/darkmatter-grub-theme/-/archive/${rev}/darkmatter-grub-theme-${rev}.tar.gz";
+          sha256 = "0fckfx5sib3d4rjv6qzghlnkyrkcac9c9z1g84w9n6nkhy3h7s7b";
+          }))
+      ];
+
+  }
+  ```
+  
+  #### 2️⃣ Enable and configure grub theme
+
+  ```nix
+  boot = {
+    # Use the GRUB 2 boot loader.
+    loader.grub = {
+      enable = true;
+      version = 2;
+
+      darkmatter-theme = {
+        enable = true;
+        style = "nixos";
+        icon = "color";
+        resolution = "1080p";
+      };
+    };
+  };
+  ```
+  #### 3️⃣ Save changes and rebuild your nixos
+
+  ```fish
+  sudo nixos-rebuild boot --flake .#mysystem
+  ```
+
+  Now the theme should be installed successfully, enjoy !!
+</details>
+
+
+> **To request a theme for a specific Linux distro, open an issue with the `feature request` label and let me know**
+
+### ❌ Uninstallation
+```shell
+sudo python3 darkmatter-theme.py --uninstall
+```
+**With a little effort the theme's text colours, progress bar colours, progress bar text, and so on can all be customised in `theme.txt` to your liking 💕**
+<div align="center">
+  <b>Please consider 🤗 giving this project a star ⭐ if you liked it</b>
+</div>
+
+<div align="center">
+  <b>To stay up to date on all future updates, follow me on 💬 <a href="https://github.com/VandalByte">Github</a>, 💬 <a href="https://gitlab.com/VandalByte">GitLab</a> or 💬 <a href="https://twitter.com/VandalByte">Twitter</a></b>
+</div>
+
+  
+### 📸 Preview
+
+|    |    |    |
+|:-------:|:-------:|:---------:|
+|![Arch](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-arch.png)|![Arch Strike](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-archstrike.png)|![Artix](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-artix.png)|
+|**Arch Linux**|**Arch Strike**|**Artix Linux**|
+|![Black Arch](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-blackarch.png)|![CentOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-centos.png)|![Chrome OS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-chromeos.png)|
+|**Black Arch**|**CentOS**|**Chrome OS**|
+|![Debian](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-debian.png)|![Deepin](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-deepin.png)|![Devuan](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-devuan.png)|
+|**Debian**|**Deepin**|**Devuan**|
+|![Elementary OS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-elementary.png)|![Endeavour OS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-endeavour.png)|![Fedora](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-fedora.png)|
+|**Elementary OS**|**Endeavour OS**|**Fedora**|
+|![FreeBSD](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-freebsd.png)|![Garuda](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-garuda.png)|![Gentoo](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-gentoo.png)|
+|**FreeBSD**|**Garuda Linux**|**Gentoo Linux**|
+|![Kali Linux](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-kali.png)|![KDE neon](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-kdeneon.png)|![Kubuntu](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-kubuntu.png)|
+|**Kali Linux**|**KDE neon**|**Kubuntu**|
+|![Linux](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-linux.png)|![Linux Lite](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-linuxlite.png)|![Linux Mint](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-linuxmint.png)|
+|**Linux**|**Linux Lite**|**Linux Mint**|
+|![Lubuntu](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-lubuntu.png)|![Manjaro](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-manjaro.png)|![MX Linux](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-mx.png)|
+|**Lubuntu**|**Manjaro**|**MX Linux**|
+|![OpenSUSE](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-opensuse.png)|![Parrot OS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-parrot.png)|![Pentoo](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-pentoo.png)|
+|**OpenSUSE**|**Parrot OS**|**Pentoo**|
+|![PopOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-popos.png)|![Red Hat](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-redhat.png)|![Slackware](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-slackware.png)|
+|**PopOS**|**Red Hat**|**Slackware**|
+|![Solus](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-solus.png)|![Sparky](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-sparky.png)|![SteamOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-steamos.png)|
+|**Solus**|**Sparky Linux**|**SteamOS**|
+|![Ubuntu](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-ubuntu.png)|![Mate](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-ubuntumate.png)|![Void](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-voidlinux.png)|
+|**Ubuntu**|**Ubuntu Mate**|**Void Linux**|
+|![Windows](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-windows10.png)|![Windows](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-windows11.png)|![Zorin](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-zorin.png)|
+|**Windows 10**|**Windows 11**|**Zorin OS**|
+|![NixOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-nixos.png)|![GuixSD](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-guixsd.png)|![DTOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-dtos.png)|
+|**NixOS**|**GuixSD**|**DTOS**|
+|![Xubuntu](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-xubuntu.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-nobara.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-arcolinux.png)|
+|**Xubuntu**|**Nobara**|**ArcoLinux**|
+|![AthenaOS](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/preview-athena.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/placeholder.png)|![PLACEHOLDER](https://raw.githubusercontent.com/VandalByte/darkmatter-grub2-theme/main/media/previews/placeholder.png)|
+|**AthenaOS**|**PLACEHOLDER**|**PLACEHOLDER**|
